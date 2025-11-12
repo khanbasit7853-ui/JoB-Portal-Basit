@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Job Portal</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    /* 🔹 Modal for Add Job */
+    .modal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background-color: rgba(0,0,0,0.5);
+      justify-content: center;
+      align-items: center;
+      z-index: 2000;
+    }
+
+    .modal-content {
+      background: #fff;
+      padding: 25px;
+      border-radius: 10px;
+      width: 90%;
+      max-width: 420px;
+      position: relative;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+      animation: fadeIn 0.3s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: scale(0.9); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    .close-btn {
+      position: absolute;
+      right: 15px;
+      top: 10px;
+      font-size: 22px;
+      color: #333;
+      cursor: pointer;
+    }
+
+    .close-btn:hover { color: red; }
+
+    form input, form textarea {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 10px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      font-size: 1rem;
+    }
+
+    form input:focus, form textarea:focus {
+      border-color: #007bff;
+      outline: none;
+    }
+
+    .add-job-btn {
+      background: #007bff;
+      color: white;
+      border: none;
+      padding: 10px 15px;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    .add-job-btn:hover {
+      background: #0056b3;
+    }
+
+    .job-listings {
+      padding: 20px;
+    }
+
+    .job-card {
+      background: #fff;
+      border-radius: 10px;
+      padding: 15px;
+      margin-bottom: 15px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+
+    .job-card h3 {
+      color: #007bff;
+      margin-bottom: 5px;
+    }
+
+    .apply-btn {
+      background: #28a745;
+      color: white;
+      border: none;
+      padding: 7px 12px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .apply-btn:hover {
+      background: #1e7e34;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Job Portal</h1>
+    <nav>
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="#job-listings">Jobs</a></li>
+        <li><a href="#about">About</a></li>
+        <li><button class="add-job-btn" onclick="openAddJobModal()">+ Add Job</button></li>
+      </ul>
+    </nav>
+  </header>
+
+  <section id="hero" class="hero">
+    <h2>Find Your Dream Job</h2>
+    <input type="text" id="searchBox" placeholder="Search jobs..." aria-label="Search for jobs" />
+    <button onclick="searchJobs()">Search</button>
+  </section>
+
+  <section id="job-listings" class="job-listings" aria-live="polite">
+    <!-- Jobs will appear here -->
+  </section>
+
+  <section id="about">
+    <h2>About My Website</h2>
+    <p>
+      Welcome to <strong>Job Portal</strong> — a simple and user-friendly website
+      designed to help people find their dream jobs easily.  
+      You can search, explore, and apply for jobs from different companies across the country.  
+      This website is created by <strong>Abdul Basit</strong> to make job hunting simple and efficient.
+    </p>
+  </section>
+
+  <footer>
+    <p>© 2025 Job Portal. All rights reserved by Abdul Basit.</p>
+  </footer>
+
+  <!-- 🔹 Add Job Modal -->
+  <div id="addJobModal" class="modal" role="dialog" aria-modal="true" aria-labelledby="addJobTitle">
+    <div class="modal-content">
+      <span class="close-btn" onclick="closeAddJobModal()">&times;</span>
+      <h2 id="addJobTitle">Add a New Job</h2>
+      <form id="addJobForm" onsubmit="addNewJob(event)">
+        <label for="jobTitle">Job Title:</label>
+        <input type="text" id="jobTitle" name="jobTitle" placeholder="e.g. Web Developer" required />
+
+        <label for="company">Company Name:</label>
+        <input type="text" id="company" name="company" placeholder="e.g. Tech Solutions" required />
+
+        <label for="location">Location:</label>
+        <input type="text" id="location" name="location" placeholder="e.g. Karachi, Pakistan" required />
+
+        <label for="requirements">Requirements:</label>
+        <textarea id="requirements" name="requirements" rows="3" placeholder="Enter job requirements..." required></textarea>
+
+        <button type="submit" class="add-job-btn">Save Job</button>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    const jobContainer = document.getElementById('job-listings');
+    let jobs = JSON.parse(localStorage.getItem('jobs')) || [];
+
+    // Render jobs
+    function renderJobs() {
+      if (jobs.length === 0) {
+        jobContainer.innerHTML = "<p>No jobs available. Add a job to get started.</p>";
+        return;
+      }
+
+      jobContainer.innerHTML = jobs.map((job, i) => `
+        <div class="job-card">
+          <h3>${job.title}</h3>
+          <p><strong>Company:</strong> ${job.company}</p>
+          <p><strong>Location:</strong> ${job.location}</p>
+          <p><strong>Requirements:</strong> ${job.requirements}</p>
+          <button class="apply-btn" onclick="applyForJob('${job.title}')">Apply Now</button>
+        </div>
+      `).join('');
+    }
+
+    renderJobs();
+
+    // Add new job
+    function addNewJob(e) {
+      e.preventDefault();
+      const title = document.getElementById('jobTitle').value.trim();
+      const company = document.getElementById('company').value.trim();
+      const location = document.getElementById('location').value.trim();
+      const requirements = document.getElementById('requirements').value.trim();
+
+      const newJob = { title, company, location, requirements };
+      jobs.push(newJob);
+      localStorage.setItem('jobs', JSON.stringify(jobs));
+
+      renderJobs();
+      closeAddJobModal();
+      e.target.reset();
+      alert("✅ Job added successfully!");
+    }
+
+    function openAddJobModal() {
+      document.getElementById('addJobModal').style.display = 'flex';
+      document.getElementById('jobTitle').focus();
+    }
+
+    function closeAddJobModal() {
+      document.getElementById('addJobModal').style.display = 'none';
+    }
+
+    window.onclick = function(event) {
+      if (event.target === document.getElementById('addJobModal')) {
+        closeAddJobModal();
+      }
+    }
+
+    function applyForJob(title) {
+      alert(`You are applying for the job: ${title}`);
+    }
+
+    // Search jobs
+    function searchJobs() {
+      const query = document.getElementById('searchBox').value.toLowerCase();
+      const filtered = jobs.filter(job => 
+        job.title.toLowerCase().includes(query) ||
+        job.company.toLowerCase().includes(query) ||
+        job.location.toLowerCase().includes(query)
+      );
+      jobContainer.innerHTML = filtered.length 
+        ? filtered.map(job => `
+          <div class="job-card">
+            <h3>${job.title}</h3>
+            <p><strong>Company:</strong> ${job.company}</p>
+            <p><strong>Location:</strong> ${job.location}</p>
+            <p><strong>Requirements:</strong> ${job.requirements}</p>
+            <button class="apply-btn" onclick="applyForJob('${job.title}')">Apply Now</button>
+          </div>
+        `).join('')
+        : "<p>No matching jobs found.</p>";
+    }
+  </script>
+</body>
+</html>

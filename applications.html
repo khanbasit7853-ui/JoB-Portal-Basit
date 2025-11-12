@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Submitted Applications - Job Portal</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    body {
+      background: #f5f7fa;
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+
+    header {
+      background: #007bff;
+      color: white;
+      padding: 15px 0;
+      text-align: center;
+      position: relative;
+    }
+
+    .back-btn {
+      position: absolute;
+      left: 20px;
+      top: 15px;
+      background: white;
+      color: #007bff;
+      border: none;
+      padding: 8px 15px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: background 0.3s ease;
+    }
+
+    .back-btn:hover {
+      background: #e2e6ea;
+    }
+
+    .count-box {
+      text-align: center;
+      margin: 25px auto 10px;
+      font-size: 1.2rem;
+      color: #333;
+      font-weight: bold;
+    }
+
+    .search-box {
+      text-align: center;
+      margin: 10px auto 25px;
+    }
+
+    .search-box input {
+      width: 300px;
+      padding: 10px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      font-size: 1rem;
+      outline: none;
+      transition: border-color 0.2s ease;
+    }
+
+    .search-box input:focus {
+      border-color: #007bff;
+    }
+
+    table {
+      width: 90%;
+      margin: 0 auto 20px;
+      border-collapse: collapse;
+      background: white;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      border-radius: 10px;
+      overflow: hidden;
+    }
+
+    th, td {
+      padding: 12px 15px;
+      border-bottom: 1px solid #ddd;
+      text-align: left;
+    }
+
+    th {
+      background: #007bff;
+      color: white;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    tr:hover {
+      background: #f1f9ff;
+    }
+
+    .view-btn {
+      background: #28a745;
+      color: white;
+      border: none;
+      padding: 7px 12px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 0.9rem;
+      transition: background 0.3s ease;
+    }
+
+    .view-btn:hover {
+      background: #218838;
+    }
+
+    .delete-btn {
+      background: #dc3545;
+      color: white;
+      border: none;
+      padding: 7px 12px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 0.9rem;
+      transition: background 0.3s ease;
+    }
+
+    .delete-btn:hover {
+      background: #b52b38;
+    }
+
+    .no-data {
+      text-align: center;
+      margin-top: 50px;
+      color: #666;
+      font-size: 1.2em;
+    }
+
+    footer {
+      text-align: center;
+      background: #007bff;
+      color: white;
+      padding: 10px;
+      margin-top: 40px;
+    }
+
+    .btn-container {
+      text-align: center;
+      margin: 25px 0;
+    }
+
+    .action-btn {
+      background: #007bff;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: background 0.3s ease;
+      margin: 0 10px;
+    }
+
+    .action-btn:hover {
+      background: #0056b3;
+    }
+
+    .clear-btn {
+      background: #dc3545;
+    }
+
+    .clear-btn:hover {
+      background: #b52b38;
+    }
+
+    /* 🔹 Modal Styles */
+    .modal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background-color: rgba(0, 0, 0, 0.6);
+      justify-content: center;
+      align-items: center;
+      z-index: 2000;
+    }
+
+    .modal-content {
+      background: white;
+      border-radius: 10px;
+      width: 90%;
+      max-width: 420px;
+      padding: 25px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+      position: relative;
+      animation: fadeIn 0.3s ease;
+    }
+
+    .modal-content h2 {
+      color: #007bff;
+      text-align: center;
+      margin-bottom: 10px;
+    }
+
+    .modal-content p {
+      margin: 8px 0;
+      color: #333;
+    }
+
+    .close-btn {
+      position: absolute;
+      right: 15px;
+      top: 10px;
+      font-size: 22px;
+      color: #333;
+      cursor: pointer;
+    }
+
+    .close-btn:hover {
+      color: red;
+    }
+
+    @keyframes fadeIn {
+      from {opacity: 0; transform: scale(0.9);}
+      to {opacity: 1; transform: scale(1);}
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <button class="back-btn" onclick="window.location.href='index.html'">⬅ Back to Home</button>
+    <h1>Submitted Applications</h1>
+  </header>
+
+  <div id="appCount" class="count-box"></div>
+
+  <div class="search-box">
+    <input type="text" id="searchInput" placeholder="Search by name, email, or job title..." onkeyup="filterApplications()" />
+  </div>
+
+  <div id="appContainer"></div>
+
+  <div class="btn-container">
+    <button class="action-btn" onclick="exportToCSV()">⬇ Export to CSV</button>
+    <button class="action-btn clear-btn" onclick="clearApplications()">🗑 Clear All Applications</button>
+  </div>
+
+  <footer>
+    <p>© 2025 Job Portal | Created by Abdul Basit</p>
+  </footer>
+
+  <!-- 🔹 Modal for Applicant Details -->
+  <div id="viewModal" class="modal">
+    <div class="modal-content">
+      <span class="close-btn" onclick="closeModal()">&times;</span>
+      <h2>Applicant Details</h2>
+      <p><strong>Job Title:</strong> <span id="modal-job"></span></p>
+      <p><strong>Name:</strong> <span id="modal-name"></span></p>
+      <p><strong>Email:</strong> <span id="modal-email"></span></p>
+      <p><strong>Phone:</strong> <span id="modal-phone"></span></p>
+      <p><strong>Message:</strong></p>
+      <p id="modal-message" style="background:#f8f9fa;padding:10px;border-radius:6px;"></p>
+    </div>
+  </div>
+
+  <script>
+    const appContainer = document.getElementById('appContainer');
+    const appCountBox = document.getElementById('appCount');
+    const searchInput = document.getElementById('searchInput');
+    const modal = document.getElementById('viewModal');
+    let applications = JSON.parse(localStorage.getItem("jobApplications")) || [];
+
+    function renderTable(filteredApps = applications) {
+      if (filteredApps.length === 0) {
+        appCountBox.textContent = "";
+        appContainer.innerHTML = "<p class='no-data'>No applications found.</p>";
+        return;
+      }
+
+      appCountBox.textContent = `📄 You have ${filteredApps.length} application${filteredApps.length > 1 ? 's' : ''} submitted.`;
+
+      let table = `
+        <table>
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Job Title</th>
+              <th>Full Name</th>
+              <th>Email</th>
+              <th>Phone</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+      `;
+
+      filteredApps.forEach((app, index) => {
+        table += `
+          <tr>
+            <td>${index + 1}</td>
+            <td>${app.jobTitle || 'N/A'}</td>
+            <td>${app.name}</td>
+            <td>${app.email}</td>
+            <td>${app.phone}</td>
+            <td>
+              <button class="view-btn" onclick="viewDetails(${index})">View</button>
+              <button class="delete-btn" onclick="deleteApplication(${index})">Delete</button>
+            </td>
+          </tr>
+        `;
+      });
+
+      table += "</tbody></table>";
+      appContainer.innerHTML = table;
+    }
+
+    renderTable();
+
+    function filterApplications() {
+      const query = searchInput.value.toLowerCase();
+      const filtered = applications.filter(app =>
+        app.name.toLowerCase().includes(query) ||
+        app.email.toLowerCase().includes(query) ||
+        (app.jobTitle && app.jobTitle.toLowerCase().includes(query))
+      );
+      renderTable(filtered);
+    }
+
+    function viewDetails(index) {
+      const app = applications[index];
+      document.getElementById("modal-job").textContent = app.jobTitle || 'N/A';
+      document.getElementById("modal-name").textContent = app.name;
+      document.getElementById("modal-email").textContent = app.email;
+      document.getElementById("modal-phone").textContent = app.phone;
+      document.getElementById("modal-message").textContent = app.message;
+      modal.style.display = "flex";
+    }
+
+    function closeModal() {
+      modal.style.display = "none";
+    }
+
+    window.onclick = (event) => {
+      if (event.target === modal) closeModal();
+    };
+
+    // 🗑 Delete single application with name confirmation
+    function deleteApplication(index) {
+      const appName = applications[index].name || "this applicant";
+      if (confirm(`⚠ Are you sure you want to delete the application of "${appName}"?`)) {
+        applications.splice(index, 1);
+        localStorage.setItem("jobApplications", JSON.stringify(applications));
+        renderTable();
+      }
+    }
+
+    function clearApplications() {
+      if (confirm("Are you sure you want to clear all applications?")) {
+        localStorage.removeItem("jobApplications");
+        applications = [];
+        renderTable();
+      }
+    }
+
+    function exportToCSV() {
+      if (applications.length === 0) {
+        alert("❌ No applications to export!");
+        return;
+      }
+
+      const csvRows = [];
+      const headers = ["Job Title", "Full Name", "Email", "Phone", "Message"];
+      csvRows.push(headers.join(","));
+
+      applications.forEach(app => {
+        const row = [
+          `"${app.jobTitle || 'N/A'}"`,
+          `"${app.name}"`,
+          `"${app.email}"`,
+          `"${app.phone}"`,
+          `"${app.message.replace(/"/g, '""')}"`
+        ];
+        csvRows.push(row.join(","));
+      });
+
+      const csvData = csvRows.join("\n");
+      const blob = new Blob([csvData], { type: "text/csv" });
+      const url = window.URL.createObjectURL(blob);
+
+      const a = document.createElement("a");
+      a.setAttribute("href", url);
+      a.setAttribute("download", "Job_Applications.csv");
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+    }
+  </script>
+</body>
+</html>

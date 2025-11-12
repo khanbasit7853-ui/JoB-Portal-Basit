@@ -1,0 +1,275 @@
+/* ====== General Page Layout ====== */
+body {
+  font-family: Arial, sans-serif;
+  background: #f5f7fa;
+  margin: 0;
+  padding: 0;
+}
+
+header {
+  background: #007bff;
+  color: white;
+  padding: 15px 0;
+  text-align: center;
+}
+
+nav ul {
+  list-style: none;
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+  margin: 10px 0 0;
+  padding: 0;
+}
+
+nav ul li a {
+  color: white;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.hero {
+  text-align: center;
+  padding: 50px 20px;
+  background: linear-gradient(to right, #007bff, #00c6ff);
+  color: white;
+}
+
+.hero input {
+  padding: 10px;
+  width: 300px;
+  border-radius: 5px;
+  border: none;
+  margin-right: 10px;
+}
+
+.hero button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  background: white;
+  color: #007bff;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.hero button:hover {
+  background: #f0f0f0;
+}
+
+/* ====== Job Listings Section ====== */
+.job-listings {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 30px 10px;
+}
+
+/* ====== Job Card ====== */
+.job-card {
+  display: flex;
+  align-items: center;
+  background: #fff;
+  border-radius: 15px;
+  padding: 20px;
+  margin: 15px;
+  width: 90%;
+  max-width: 800px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.job-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+}
+
+/* ====== Profile-style Image ====== */
+.job-image {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%; /* 👈 makes it circular */
+  object-fit: cover;  /* maintain aspect ratio */
+  margin-right: 25px;
+  border: 3px solid #007bff; /* blue border around image */
+  box-shadow: 0 0 6px rgba(0,0,0,0.15);
+}
+
+/* ====== Job Details Text ====== */
+.job-details {
+  flex: 1;
+}
+
+.job-details h3 {
+  margin: 0;
+  font-size: 1.5rem;
+  color: #333;
+}
+
+.job-details p {
+  margin: 5px 0;
+  color: #555;
+}
+
+/* ====== Apply Button ====== */
+.apply-btn {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 10px 18px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.95rem;
+  transition: background 0.3s ease;
+}
+
+.apply-btn:hover {
+  background-color: #0056b3;
+}
+
+/* ====== Footer ====== */
+footer {
+  text-align: center;
+  background: #007bff;
+  color: white;
+  padding: 15px;
+  margin-top: 30px;
+}
+
+
+/* ✅ Modal Background */
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1000;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.6);
+  justify-content: center;
+  align-items: center;
+}
+
+/* ✅ Modal Box Styling */
+.modal-content {
+  background-color: #fff;
+  padding: 25px;
+  border-radius: 14px;
+  width: 90%;
+  max-width: 420px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.25);
+  animation: fadeIn 0.3s ease;
+  position: relative;
+}
+
+/* ✅ Close Button */
+.close-btn {
+  position: absolute;
+  right: 15px;
+  top: 10px;
+  font-size: 24px;
+  color: #333;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.close-btn:hover {
+  color: red;
+}
+
+/* ✅ Requirements List */
+#modal-requirements {
+  margin-top: 10px;
+  padding-left: 20px;
+}
+
+#modal-requirements li {
+  margin-bottom: 6px;
+  line-height: 1.4;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: scale(0.9); }
+  to { opacity: 1; transform: scale(1); }
+}
+/* ====== Apply Form Modal (New) ====== */
+#applyModal {
+  display: none;
+  position: fixed;
+  z-index: 1001;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.6);
+  justify-content: center;
+  align-items: center;
+}
+
+/* Form Modal Box */
+#applyModal .modal-content {
+  background-color: #fff;
+  padding: 25px;
+  border-radius: 14px;
+  width: 90%;
+  max-width: 450px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.25);
+  animation: fadeIn 0.3s ease;
+  position: relative;
+}
+
+#applyModal h2 {
+  text-align: center;
+  color: #007bff;
+  margin-bottom: 15px;
+}
+
+/* Form Fields */
+#applyForm {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+#applyForm input,
+#applyForm textarea {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 1rem;
+  outline: none;
+  transition: border-color 0.2s ease;
+}
+
+#applyForm input:focus,
+#applyForm textarea:focus {
+  border-color: #007bff;
+}
+
+/* Submit Button */
+#applyForm button {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.3s ease;
+}
+
+#applyForm button:hover {
+  background-color: #0056b3;
+}
+/* ✅ Proceed to Apply Button (inside Requirements Modal) */
+.apply-now-btn {
+  background-color: #28a745;
+  color: white;
+  border: none;
+  padding: 10px 18px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+  margin-top: 15px;
+  transition: background 0.3s ease;
+  width: 100%;
+}
+
+.apply-now-btn:hover {
+  background-color: #218838;
+}
